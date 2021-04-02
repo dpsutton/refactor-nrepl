@@ -39,6 +39,8 @@
 (def cljc-ns-same-clj-cljs (clean-msg "test/resources/cljcns_same_clj_cljs.cljc"))
 (def cljc-ns-same-clj-cljs-cleaned (core/read-ns-form-with-meta (absolute-path "test/resources/cljcns_same_clj_cljs_cleaned.cljc")))
 
+(def cljc-ns-requires-self (clean-msg "test/resources/cljcns_requires_self.cljc"))
+
 (def ns-with-shorthand-meta (clean-msg "test/resources/ns_with_shorthand_meta.clj"))
 (def ns-with-multiple-shorthand-meta (clean-msg "test/resources/ns_with_multiple_shorthand_meta.clj"))
 (def ns-with-gen-class-methods-meta (clean-msg "test/resources/ns_with_gen_class_methods_meta.clj"))
@@ -188,6 +190,12 @@
 (deftest does-not-use-read-conditionals-when-ns-are-equal
   (is (= (clean-ns cljc-ns-same-clj-cljs)
          cljc-ns-same-clj-cljs-cleaned)))
+
+(deftest leaves-reader-conditions-for-self-requires-in-cljs
+  (is (nil? (clean-ns cljc-ns-requires-self))))
+
+(comment
+  (clean-ns {:path "/Users/dan/projects/work/metabase/shared/src/metabase/query_processor/error_type.cljc"}))
 
 (deftest respects-no-prune-option
   (config/with-config {:prune-ns-form false}
